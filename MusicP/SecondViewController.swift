@@ -19,102 +19,88 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var songName: UILabel!
     @IBOutlet weak var artistName: UILabel!
     
+    @IBOutlet weak var slier: UISlider!
+    @IBOutlet weak var rewind: UIButton!
+    @IBOutlet weak var playbtn: UIButton!
+    @IBOutlet weak var nextbtn: UIButton!
+    
+    
     @IBOutlet weak var holder: UIView!
-    /*
-    private let albumImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
-    
-    private let songNameLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private let artistNameLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-     */
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let song = songs[position]
 
         self.albumImage.image = UIImage(named: song.elbumImage)
+        
         self.songName.text = song.name
         self.artistName.text = song.artistName
         
         // Do any additional setup after loading the view.
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if holder.subviews.count == 0 {
+        print(holder.subviews.count)
+        if holder.subviews.count == 7 {
             configure()
         }
         
     }
+    
     func configure(){
         let song = songs[position]
         
-        
         let urlString = Bundle.main.path(forResource: song.trackName, ofType: "mp3")
+        
         do{
             try AVAudioSession.sharedInstance().setMode(.default)
             try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
             
             guard let urlString = urlString else {
+                print("urlString is nil")
                 return
             }
             
             player = try AVAudioPlayer(contentsOf: URL(string: urlString)!)
             
-            guard let player = player else { return }
-            print("music play!")
+            guard let player = player else {
+                print("player is nil")
+                return }
+            
             player.play()
             
         }catch {
             print("error")
         }
-        /*
-        albumImageView.frame = CGRect(x: 10,
-                                      y: 10,
-                                      width: holder.frame.width - 20,
-                                      height: holder.frame.width - 20)
-        albumImageView.image = UIImage(named: song.elbumImage)
-        holder.addSubview(albumImageView)
         
-        songNameLabel.frame = CGRect(x: 10,
-                                     y: albumImageView.frame.size.height + 10,
-                                     width: holder.frame.width - 20,
-                                     height: 70)
-       
-        
-        artistNameLabel.frame = CGRect(x: 10,
-                                       y: albumImageView.frame.size.height+10+70,
-                                       width: holder.frame.width-20,
-                                       height: 70)
-        songNameLabel.text = song.name
-        artistNameLabel.text = song.artistName
-        
-        holder.addSubview(songNameLabel)
-    
-        holder.addSubview(artistNameLabel)
- */
         
     }
+    @IBAction func playMusic(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        if sender.isSelected{
+            if let player = player{
+                player.stop()
+            }
+        }else{
+            if let player = player {
+                player.play()
+            }
+        }
+    }
     
+    @IBAction func changedSlider(_ sender: UISlider) {
+        print(sender.value)
+    }
     
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let player = player {
-            player.stop()
+            player.play()
         }
+        
     }
     
     /*

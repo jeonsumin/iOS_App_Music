@@ -111,6 +111,9 @@
                                             <constraint firstAttribute="height" constant="40" id="wH5-X2-CfJ"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="fast_rewind-24px"/>
+                                        <connections>
+                                            <action selector="backPlayMusic" destination="NCG-yW-QmR" eventType="touchUpInside" id="8Fo-Ke-oIJ"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SEb-My-TXg">
                                         <rect key="frame" x="260" y="703" width="40" height="40"/>
@@ -118,6 +121,9 @@
                                             <constraint firstAttribute="width" constant="40" id="loU-tX-R5y"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="fast_forward-24px"/>
+                                        <connections>
+                                            <action selector="nextPlayMusic:" destination="NCG-yW-QmR" eventType="touchUpInside" id="Tcl-Zq-kE5"/>
+                                        </connections>
                                     </button>
                                     <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="IGQ-sL-vna">
                                         <rect key="frame" x="44" y="545" width="327" height="30"/>

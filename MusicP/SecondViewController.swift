@@ -30,11 +30,12 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let song = songs[position]
-
-        self.albumImage.image = UIImage(named: song.elbumImage)
         
+        self.albumImage.image = UIImage(named: song.elbumImage)
         self.songName.text = song.name
         self.artistName.text = song.artistName
+        
+       
         
         // Do any additional setup after loading the view.
     }
@@ -42,9 +43,9 @@ class SecondViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         print(holder.subviews.count)
-        if holder.subviews.count == 7 {
+//        if holder.subviews.count == 7 {
             configure()
-        }
+//        }
         
     }
     
@@ -68,6 +69,15 @@ class SecondViewController: UIViewController {
                 print("player is nil")
                 return }
             
+              self.albumImage.image = UIImage(named: song.elbumImage)
+            self.albumImage.image = UIImage(named: song.elbumImage)
+                  self.songName.text = song.name
+                  self.artistName.text = song.artistName
+            holder.addSubview(albumImage)
+            holder.addSubview(self.songName)
+            holder.addSubview(self.artistName)
+            holder.addSubview(nextbtn)
+            
             player.play()
             
         }catch {
@@ -90,10 +100,37 @@ class SecondViewController: UIViewController {
         }
     }
     
-    @IBAction func changedSlider(_ sender: UISlider) {
-        print(sender.value)
+    @IBAction func backPlayMusic() {
+        if position > 0 {
+            position = position - 1
+            player?.stop()
+            for subview in holder.subviews{
+                subview.removeFromSuperview()
+            }
+            configure()
+        }
     }
     
+    @IBAction func nextPlayMusic(_ sender: Any) {
+        print("positino : \(position), songs.count: \(songs.count), holder.subview.count: \(holder.subviews.count)")
+        if position < (songs.count - 1 ) {
+                  position = position + 1
+                  player?.stop()
+                  for subview in holder.subviews{
+                      subview.removeFromSuperview()
+                  }
+                  configure()
+              }
+    }
+    
+    @IBAction func changedSlider(_ sender: UISlider) {
+        print(sender.value)
+//        sender.addTarget(self, action: #selector(getter: player?.isPlaying), for: .valueChanged)
+        if sender.isTracking { return }
+        self.player?.currentTime = TimeInterval(sender.value)
+        
+    }
+    //MARK:- TODO: 슬라이더 값 가져오기랑 다음 음악과 이전 음악으로 넘어가는 코드 작성하기
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

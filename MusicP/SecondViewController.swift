@@ -15,15 +15,29 @@ class SecondViewController: UIViewController {
     public var songs : [song] = []
     
     var player: AVAudioPlayer?
-    @IBOutlet weak var albumImage: UIImageView!
-    @IBOutlet weak var songName: UILabel!
-    @IBOutlet weak var artistName: UILabel!
     
-    @IBOutlet weak var slier: UISlider!
-    @IBOutlet weak var rewind: UIButton!
-    @IBOutlet weak var playbtn: UIButton!
-    @IBOutlet weak var nextbtn: UIButton!
     
+    private let albumImage : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+    
+    private let songNameLabel : UILabel = {
+        let Label = UILabel()
+        Label.textAlignment = .center
+        Label.numberOfLines = 0
+        return Label
+    }()
+    
+    private let artistNameLabel : UILabel = {
+        let Label = UILabel()
+        Label.textAlignment = .center
+        Label.numberOfLines = 0
+        return Label
+    }()
+    
+    let playPauseButton = UIButton()
     
     @IBOutlet weak var holder: UIView!
 
@@ -31,14 +45,10 @@ class SecondViewController: UIViewController {
         super.viewDidLoad()
         let song = songs[position]
         
-        self.albumImage.image = UIImage(named: song.elbumImage)
-        self.songName.text = song.name
-        self.artistName.text = song.artistName
-        
-       
         
         // Do any additional setup after loading the view.
     }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -69,38 +79,101 @@ class SecondViewController: UIViewController {
                 print("player is nil")
                 return }
             
-              self.albumImage.image = UIImage(named: song.elbumImage)
-            self.albumImage.image = UIImage(named: song.elbumImage)
-                  self.songName.text = song.name
-                  self.artistName.text = song.artistName
-            holder.addSubview(albumImage)
-            holder.addSubview(self.songName)
-            holder.addSubview(self.artistName)
-            holder.addSubview(nextbtn)
+            //음악 볼륨 50% 설정
+            player.volume = 0.5
             
+            
+            //뷰가 생성되었을때 음악 재생
             player.play()
+            
+            //앨범 이미지 위치 지정
+            albumImage.frame = CGRect(x: 10, y: 10, width: holder.frame.size.width-20, height: holder.frame.size.width-20)
+            //앨범 이미지 설정
+            albumImage.image = UIImage(named: song.elbumImage)
+            
+            //앨범이미지 뷰에 추가
+            holder.addSubview(albumImage)
+            
+            //노래이름 위치 지정
+            songNameLabel.frame = CGRect(x: 10, y: albumImage.frame.size.height + 10, width: holder.frame.size.width-20, height: 70)
+            //노래 이름 설정
+            songNameLabel.text = song.name
+            
+            //가수명 위치 지정
+            artistNameLabel.frame = CGRect(x: 10, y: albumImage.frame.size.height + 10 + 70, width: holder.frame.size.width-20, height: 70)
+            artistNameLabel.text = song.artistName
+            
+            //노래이름 라벨 뷰에 추가
+            holder.addSubview(songNameLabel)
+            //가수명 라벨 뷰에 추가
+            holder.addSubview(artistNameLabel)
+            
+            //음악 컨트롤러
+            let nextButton = UIButton()
+            let backButton = UIButton()
+            
+            //image
+            playPauseButton.setBackgroundImage(UIImage(named: "play_circle_filled-24px.fill"), for: .normal)
+            nextButton.setBackgroundImage(UIImage(named: "fast_forward-24px.fill"), for: .normal)
+            backButton.setBackgroundImage(UIImage(named: "fast_rewind-24px.fill"), for: .normal)
+            
+            //frme
+            let yPosision = artistNameLabel.frame.origin.y + 70 + 20
+            let size: CGFloat = 50
+            
+            playPauseButton.frame = CGRect(x: (holder.frame.size.width - size) / 2.0, y: yPosision, width: size, height: size)
+
+            nextButton.frame = CGRect(x: holder.frame.size.width - size - 20 , y: yPosision, width: size, height: size)
+
+            backButton.frame = CGRect(x: 20, y: yPosision, width: size, height: size)
+
+            
+            
+            //add action
+            playPauseButton.addTarget(self, action: #selector(playMusic), for: .touchUpInside)
+            nextButton.addTarget(self, action: #selector(nextPlayMusic), for: .touchUpInside)
+            backButton.addTarget(self, action: #selector(backPlayMusic), for: .touchUpInside)
+            
+            playPauseButton.tintColor = .black
+            nextButton.tintColor = .black
+            backButton.tintColor = .black
+            
+            
+            holder.addSubview(playPauseButton)
+            holder.addSubview(nextButton)
+            holder.addSubview(backButton)
+            
+            //슬라이더 추가
+            let slider = UISlider(frame: CGRect(x: 20, y: holder.frame.size.height - 60, width: holder.frame.size.width-40, height: 50 ))
+            
+            slider.value = 0.5
+            slider.addTarget(self, action: #selector(didslideSlider(_:)), for: .valueChanged)
+            holder.addSubview(slider)
             
         }catch {
             print("error")
         }
         
-        
     }
-    @IBAction func playMusic(_ sender: UIButton) {
-        sender.isSelected = !sender.isSelected
-        
-        if sender.isSelected{
-            if let player = player{
-                player.stop()
-            }
+
+    @objc func didslideSlider(_ slider: UISlider) {
+         let value = slider.value
+         player?.volume = value
+     }
+    
+    @objc func playMusic() {
+        if player?.isPlaying == true {
+            player?.pause()
+            
+            playPauseButton.setBackgroundImage(UIImage(named: "pause_circle_filled-24px.fill"), for: .normal)
         }else{
-            if let player = player {
-                player.play()
-            }
+            player?.play()
+            
+            playPauseButton.setBackgroundImage(UIImage(named: "play_circle_filled-24px.fill"), for: .normal)
         }
     }
     
-    @IBAction func backPlayMusic() {
+    @objc func backPlayMusic() {
         if position > 0 {
             position = position - 1
             player?.stop()
@@ -111,7 +184,7 @@ class SecondViewController: UIViewController {
         }
     }
     
-    @IBAction func nextPlayMusic(_ sender: Any) {
+    @objc func nextPlayMusic() {
         print("positino : \(position), songs.count: \(songs.count), holder.subview.count: \(holder.subviews.count)")
         if position < (songs.count - 1 ) {
                   position = position + 1
@@ -123,19 +196,18 @@ class SecondViewController: UIViewController {
               }
     }
     
+    //MARK:- TODO: 슬라이더 값 가져오기랑 다음 음악과 이전 음악으로 넘어가는 코드 작성하기
+    
     @IBAction func changedSlider(_ sender: UISlider) {
         print(sender.value)
-//        sender.addTarget(self, action: #selector(getter: player?.isPlaying), for: .valueChanged)
-        if sender.isTracking { return }
-        self.player?.currentTime = TimeInterval(sender.value)
         
     }
-    //MARK:- TODO: 슬라이더 값 가져오기랑 다음 음악과 이전 음악으로 넘어가는 코드 작성하기
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let player = player {
-            player.play()
+            player.stop()
+            
         }
         
     }

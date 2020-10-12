@@ -118,6 +118,22 @@
 		DE11A5822473ED9100970980 /* MusicP */ = {
 			isa = PBXGroup;
 			children = (
+				DECB6D012519CB61009AF4AA /* Music */,
+				DE11A5832473ED9100970980 /* AppDelegate.swift */,
+				DE11A5852473ED9100970980 /* SceneDelegate.swift */,
+				DE11A5872473ED9100970980 /* ViewController.swift */,
+				DE11A5892473ED9100970980 /* Main.storyboard */,
+				DE11A58C2473ED9200970980 /* Assets.xcassets */,
+				DE11A58E2473ED9200970980 /* LaunchScreen.storyboard */,
+				DE11A5912473ED9200970980 /* Info.plist */,
+				DE11A59D247413D200970980 /* SecondViewController.swift */,
+			);
+			path = MusicP;
+			sourceTree = "<group>";
+		};
+		DECB6D012519CB61009AF4AA /* Music */ = {
+			isa = PBXGroup;
+			children = (
 				DE241FD7247A34E7009F22BB /* 001.mp3 */,
 				DE241FDA247A3688009F22BB /* 002.mp3 */,
 				DE241FDB247A368A009F22BB /* 003.mp3 */,
@@ -148,16 +164,8 @@
 				DE241FF0247A3DDA009F22BB /* 028.mp3 */,
 				DE241FEE247A3DD7009F22BB /* 029.mp3 */,
 				DE241FDF247A3DBF009F22BB /* 030.mp3 */,
-				DE11A5832473ED9100970980 /* AppDelegate.swift */,
-				DE11A5852473ED9100970980 /* SceneDelegate.swift */,
-				DE11A5872473ED9100970980 /* ViewController.swift */,
-				DE11A5892473ED9100970980 /* Main.storyboard */,
-				DE11A58C2473ED9200970980 /* Assets.xcassets */,
-				DE11A58E2473ED9200970980 /* LaunchScreen.storyboard */,
-				DE11A5912473ED9200970980 /* Info.plist */,
-				DE11A59D247413D200970980 /* SecondViewController.swift */,
 			);
-			path = MusicP;
+			path = Music;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
